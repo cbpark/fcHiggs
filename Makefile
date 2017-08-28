@@ -11,15 +11,15 @@ RM       := rm -f
 EXE    := $(BINDIR)/pph
 EXESRC := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ := $(EXESRC:.cc=.o)
-LIBSRC := $(filter-out $(EXESRC),$(wildcard $(SRCDIR)/*.cc))
-LIBOBJ := $(LIBSRC:.cc=.o)
+OBJSRC := $(filter-out $(EXESRC),$(wildcard $(SRCDIR)/*.cc))
+OBJ    := $(OBJSRC:.cc=.o)
 
 .PHONY: all build clean
 
 all: $(EXE)
 
-$(BINDIR)/%: $(SRCDIR)/%.o build $(LIBOBJ)
-	$(CXX) $(LDFLAGS) -o $@ $< $(LIBOBJ) $(LIBS)
+$(BINDIR)/%: $(SRCDIR)/%.o build $(OBJ)
+	$(CXX) $(LDFLAGS) -o $@ $< $(OBJ) $(LIBS)
 
 $(LIBOBJ): CXXFLAGS += -fPIC
 
@@ -27,5 +27,5 @@ build:
 	$(MKDIR) $(BINDIR)
 
 clean::
-	$(RM) $(EXEOBJ) $(LIBOBJ) $(EXE)
+	$(RM) $(EXEOBJ) $(OBJ) $(EXE)
 	$(RM) -r $(BINDIR)
