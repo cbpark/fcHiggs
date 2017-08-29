@@ -1,5 +1,7 @@
+PKGNAME  := fcHiggs
 SRCDIR   := src
 BINDIR   := bin
+LIBDIR   := lib
 CXXFLAGS := -g -O2 -Wall -Wextra -std=c++14 -pedantic -I$(SRCDIR) $(CXXFLAGS)
 LDFLAGS  := -O2 $(LDFLAGS)
 LIBS     :=
@@ -11,21 +13,27 @@ RM       := rm -f
 EXE    := $(BINDIR)/pph
 EXESRC := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ := $(EXESRC:.cc=.o)
-OBJSRC := $(filter-out $(EXESRC),$(wildcard $(SRCDIR)/*.cc))
-OBJ    := $(OBJSRC:.cc=.o)
+LIB    := $(LIBDIR)/lib$(PKGNAME).a
+LIBSRC := $(filter-out $(EXESRC),$(wildcard $(SRCDIR)/*.cc))
+LIBOBJ := $(LIBSRC:.cc=.o)
 
 .PHONY: all build clean
 
 all: $(EXE)
 
-$(BINDIR)/%: $(SRCDIR)/%.o build $(OBJ)
-	$(CXX) $(LDFLAGS) -o $@ $< $(OBJ) $(LIBS)
+$(BINDIR)/%: $(SRCDIR)/%.o build $(LIB)
+	$(CXX) $(LDFLAGS) -o $@ $< -L$(LIBDIR) -l$(PKGNAME) $(LIBS)
 
-$(LIBOBJ): CXXFLAGS += -fPIC
+$(LIB): CXXFLAGS += -fPIC
+$(LIB): $(LIBOBJ)
+	$(AR) $@ $^
+	ranlib $@
 
 build:
+	$(MKDIR) $(LIBDIR)
 	$(MKDIR) $(BINDIR)
 
 clean::
-	$(RM) $(EXEOBJ) $(OBJ) $(EXE)
-	$(RM) -r $(BINDIR)
+	$(RM) $(EXEOBJ) $(LIBOBJ)
+	$(RM) $(EXE) $(LIB)
+	$(RM) -r $(BINDIR) $(LIBDIR)
