@@ -16,6 +16,12 @@ namespace fchiggs {
 double sigmaGGH(const double shat, const double mh, const double gammah,
                 const double alpha_s, const Hup &hu, const Hdown &hd,
                 const Angles &ang);
+
+double sigmaBBH(const double shat, const double mh, const double gammah,
+                const Hdown &hd, const Angles &ang);
+
+double sigmaQBH(const double shat, const double mh, const double gammah,
+                const Hdown &hd, const Angles &ang, const DQuark &type);
 }  // namespace fchiggs
 
 #endif  // FCHIGGS_SRC_SIGMA_PPH_H_

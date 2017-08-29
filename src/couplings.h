@@ -12,6 +12,8 @@
 #include "angles.h"
 
 namespace fchiggs {
+enum class DQuark { Down, Strange, Bottom };
+
 class Hup {
 private:
     double h31u_, h32u_, h33u_;

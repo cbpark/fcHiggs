@@ -63,4 +63,28 @@ double sigmaGGH(const double shat, const double mh, const double gammah,
                 const Angles &ang) {
     return sigma0(mh, alpha_s, hu, hd, ang) * delta(shat, mh, gammah);
 }
+
+double sigmaBBH(const double shat, const double mh, const double gammah,
+                const Hdown &hd, const Angles &ang) {
+    const double coeff = PI * MB2 / (2.0 * NC * NC * VEW2);
+    const double coup =
+        ang.cos_alpha() / ang.cos_beta() +
+        VEW * ang.sin_alpha_beta() * hd.c33() / (SQRT2 * MB * ang.cos_beta());
+    const double beta2 = 1 - 4 * MB2 / (mh * mh);
+    return coeff * coup * coup * std::sqrt(beta2) * delta(shat, mh, gammah);
+}
+
+double sigmaQBH(const double shat, const double mh, const double gammah,
+                const Hdown &hd, const Angles &ang, const DQuark &type) {
+    const double coeff = PI / (8.0 * NC * NC);
+    double coup = ang.sin_alpha_beta() / ang.cos_beta();
+    if (type == DQuark::Down) {
+        coup *= hd.c13();
+    } else if (type == DQuark::Strange) {
+        coup *= hd.c23();
+    } else {
+        coup *= 0.0;
+    }
+    return coeff * coup * coup * delta(shat, mh, gammah);
+}
 }  // namespace fchiggs
