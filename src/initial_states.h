@@ -33,6 +33,34 @@ public:
 private:
     void init(const double s);
 };
+
+class Rho {
+private:
+    double m_, gamma_, s_;
+    double rho1_, rho2_;
+
+public:
+    Rho() = delete;
+    Rho(const double qmin, const double qmax, const double m,
+        const double gamma, const double s)
+        : m_{m}, gamma_{gamma}, s_{s} {
+        init(qmin * qmin, qmax * qmax);
+    }
+
+    double delta() const { return rho2_ - rho1_; }
+
+    double jacobian(const double val) const;
+
+    /** \hat{s} = M * Gamma * tan(rho) + M^2 */
+    double shat(const double val) const;
+
+    friend double rhoValue(const Rho &rho);
+
+private:
+    void init(const double qmin2, const double qmax2);
+};
+
+double rhoValue(const Rho &rho);
 }  // namespace fchiggs
 
 #endif  // FCHIGGS_SRC_INITIAL_STATES_H_

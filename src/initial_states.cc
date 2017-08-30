@@ -17,4 +17,27 @@ void InitPartons::init(const double s) {
     x1_ = sqrt_tau * std::exp(y);
     x2_ = sqrt_tau * std::exp(-y);
 }
+
+void Rho::init(const double qmin2, const double qmax2) {
+    const double gm = gamma_ * m_;
+    rho1_ = std::atan((qmin2 - m_ * m_) / gm);
+    rho2_ = std::atan((qmax2 - m_ * m_) / gm);
+}
+
+/*
+ * |d\tau / d\rho| = M * Gamma * sec^2\rho / s,
+ * where \tau = x1 * x2 and * s is the proton-proton CM energy.
+ */
+double Rho::jacobian(const double val) const {
+    const double cosrho = std::cos(val);
+    return m_ * gamma_ / (cosrho * cosrho * s_);
+}
+
+double Rho::shat(const double val) const {
+    return m_ * gamma_ * std::tan(val) + m_ * m_;
+}
+
+double rhoValue(const Rho &rho) {
+    return rho.rho1_ + getRandom() * (rho.rho2_ - rho.rho1_);
+}
 }  // namespace fchiggs
