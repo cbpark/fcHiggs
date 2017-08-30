@@ -9,9 +9,12 @@
 #include "sigma_pph.h"
 #include <cmath>
 #include <complex>
+#include <memory>
+#include "LHAPDF/LHAPDF.h"
 #include "angles.h"
 #include "constants.h"
 #include "couplings.h"
+#include "initial_states.h"
 
 using std::complex;
 
@@ -36,6 +39,9 @@ complex<double> fTriangle(const double tau) {
  */
 double sigma0(const double mh, const double alpha_s, const Hup &hu,
               const Hdown &hd, const Angles &ang) {
+    // SM couplings:
+    // const double coup_u = 1.0;
+    // const double coup_d = 1.0;
     const double c1 = ang.cos_alpha() / ang.cos_beta();
     const double c2 = VEW * ang.sin_alpha_beta() / (SQRT2 * ang.cos_beta());
     const double coup_u = c1 + c2 * hu.c33() / MT;
@@ -86,5 +92,37 @@ double sigmaQBH(const double shat, const double mh, const double gammah,
         coup *= 0.0;
     }
     return coeff * coup * coup * delta(shat, mh, gammah);
+}
+
+double sigmaPPH(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
+                const double mu, const double mh, const double gammah,
+                const double alpha_s, const Hup &hu, const Hdown &hd,
+                const Angles &ang) {
+    const double x1 = p.x1(), x2 = p.x2();
+    const double shat = p.shat();
+
+    // g g --> H
+    double sigma = pdf->xfxQ(21, x1, mu) * pdf->xfxQ(21, x2, mu) *
+                   sigmaGGH(shat, mh, gammah, alpha_s, hu, hd, ang);
+
+    // b b --> H
+    sigma += pdf->xfxQ(5, x1, mu) * pdf->xfxQ(-5, x2, mu) *
+             sigmaBBH(shat, mh, gammah, hd, ang);
+
+    // d b --> H
+    auto q_typ = DQuark::Down;
+    sigma += pdf->xfxQ(1, x1, mu) * pdf->xfxQ(-5, x2, mu) *
+             sigmaQBH(shat, mh, gammah, hd, ang, q_typ);
+    sigma += pdf->xfxQ(-1, x1, mu) * pdf->xfxQ(5, x2, mu) *
+             sigmaQBH(shat, mh, gammah, hd, ang, q_typ);
+
+    // s b --> H
+    q_typ = DQuark::Strange;
+    sigma += pdf->xfxQ(3, x1, mu) * pdf->xfxQ(-5, x2, mu) *
+             sigmaQBH(shat, mh, gammah, hd, ang, q_typ);
+    sigma += pdf->xfxQ(-3, x1, mu) * pdf->xfxQ(5, x2, mu) *
+             sigmaQBH(shat, mh, gammah, hd, ang, q_typ);
+
+    return sigma / (x1 * x2);
 }
 }  // namespace fchiggs
