@@ -33,15 +33,12 @@ constexpr double VEW2 = 1.0 / (SQRT2 * GF);
 const double VEW = std::sqrt(VEW2);
 
 /** alpha_s (MZ) */
-constexpr double ALPHAS = 0.1181;
+constexpr double ALPHAS = 0.118;
 
 constexpr int NC = 3;
 
 /** conversion factor GeV^-2 -> pb */
 constexpr double PBCONV = 3.893793656e8;
-
-/** range of costh. 1 - (-1) = 2. */
-constexpr double DELTATH = 2;
 
 constexpr double VUD = 0.97434;
 constexpr double VUS = 0.22506;
