@@ -9,8 +9,21 @@
 #ifndef FCHIGGS_SRC_UTILS_H_
 #define FCHIGGS_SRC_UTILS_H_
 
+#include <cmath>
+#include <utility>
+#include "constants.h"
+
 namespace fchiggs {
 double getRandom();
+
+inline std::pair<double, double> sigma(const double sum_w,
+                                       const double sum_w_sq,
+                                       const unsigned int n) {
+    const double xsec = sum_w / n;  // cross section
+    const double variance = sum_w_sq / n - xsec * xsec;
+    const double err = std::sqrt(variance / n);  // error
+    return std::make_pair(xsec * PBCONV, err * PBCONV);
+}
 }  // namespace fchiggs
 
 #endif  // FCHIGGS_SRC_UTILS_H_

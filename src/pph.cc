@@ -18,6 +18,7 @@
 #include "pdf.h"
 #include "sigma_pph.h"
 #include "user_interface.h"
+#include "utils.h"
 
 using std::to_string;
 
@@ -27,13 +28,12 @@ constexpr double ECM = 14000.0;
 constexpr double SBEAM = ECM * ECM;
 constexpr char PDFNAME[] = "NNPDF23_lo_as_0130_qed";
 constexpr unsigned int N = 5000000;
-
 const double Y33U = SQRT2 * MT / VEW;
 
 int main(int argc, char *argv[]) {
     if (argc < 4 || argc > 5) {
         std::cerr << "Usage: " << appname
-                  << " <m_H> <tan(beta)> <cos(alpha-beta)> [output]\n";
+                  << " <m_H (GeV)> <tan(beta)> <cos(alpha-beta)> [output]\n";
         return 1;
     }
     message(appname, "p p --> H");
@@ -45,6 +45,7 @@ int main(int argc, char *argv[]) {
     const double qmin = 0.0, qmax = std::sqrt(SBEAM), mtr = mH, gtr = mH;
     const double mu = mH;
     const fchiggs::Rho rho{qmin, qmax, mtr, gtr, SBEAM};
+    double val = fchiggs::rhoValue(rho);
 
     auto pdf = fchiggs::mkPdf(PDFNAME);
     const double alpha_s = pdf->alphasQ(mu);
@@ -61,8 +62,7 @@ int main(int argc, char *argv[]) {
 
     message(appname, "integrating for cross section ...");
     double sum_w = 0, sum_w_sq = 0;
-    for (auto itry = 0; itry != N; ++itry) {
-        const double val = fchiggs::rhoValue(rho);
+    for (auto itry = 0; itry != N; ++itry, val = fchiggs::rhoValue(rho)) {
         const double shat = rho.shat(val);
         const fchiggs::InitPartons p{SBEAM, shat};
         const double w =
@@ -72,23 +72,22 @@ int main(int argc, char *argv[]) {
         sum_w_sq += w * w;
     }
 
-    const double sigma = sum_w / N;  // cross section
-    const double variance = sum_w_sq / N - sigma * sigma;
-    const double err = std::sqrt(variance / N);  // error
+    auto result = fchiggs::sigma(sum_w, sum_w_sq, N);
+    const double sigma = result.first, err = result.second;
     message(appname, "... done.");
 
     if (argc == 4) {
         message(appname,
-                "total cross section = " + to_string(sigma * PBCONV) + " +- " +
-                    to_string(err * PBCONV) + " pb");
+                "total cross section = " + to_string(sigma) + " +- " +
+                    to_string(err) + " pb");
     }
 
     if (argc == 5) {
         std::ofstream fout;
         fout.open(argv[4], std::ios_base::app);
         fout << std::right << std::fixed << std::setw(7) << std::setprecision(2)
-             << mH << std::setw(14) << std::setprecision(9) << sigma * PBCONV
-             << std::setw(14) << err * PBCONV << '\n';
+             << mH << std::setw(14) << std::setprecision(9) << sigma
+             << std::setw(14) << err << '\n';
         message(appname,
                 "the output has been saved to `" + std::string(argv[4]) + "'.");
     }
