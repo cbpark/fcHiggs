@@ -2,7 +2,7 @@ PKGNAME  := fcHiggs
 SRCDIR   := src
 BINDIR   := bin
 LIBDIR   := lib
-CXXFLAGS := -g -O2 -Wall -Wextra -std=c++14 -pedantic -I$(SRCDIR) $(CXXFLAGS)
+CXXFLAGS := -g -O2 -march=native -Wall -Wextra -std=c++14 -pedantic -I$(SRCDIR) $(CXXFLAGS)
 LDFLAGS  := -O2 $(LDFLAGS)
 LIBS     :=
 AR       := ar crs
