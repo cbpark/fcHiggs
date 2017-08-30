@@ -11,7 +11,6 @@
 
 #include <cmath>
 
-namespace fchiggs {
 constexpr double PI = 3.141592653589793;
 
 /** top quark mass */
@@ -50,6 +49,5 @@ constexpr double VUB = 0.00357;
 constexpr double VCD = 0.22492;
 constexpr double VCS = 0.97351;
 constexpr double VCB = 0.0411;
-}  // namespace fchiggs
 
 #endif  // FCHIGGS_SRC_CONSTANTS_H_
