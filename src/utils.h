@@ -11,8 +11,6 @@
 
 namespace fchiggs {
 double getRandom();
-
-inline double costh(const double delta) { return -1.0 + getRandom() * delta; }
 }  // namespace fchiggs
 
 #endif  // FCHIGGS_SRC_UTILS_H_
