@@ -17,6 +17,11 @@ LIB    := $(LIBDIR)/lib$(PKGNAME).a
 LIBSRC := $(filter-out $(EXESRC),$(wildcard $(SRCDIR)/*.cc))
 LIBOBJ := $(LIBSRC:.cc=.o)
 
+# LHAPDF (http://lhapdf.hepforge.org/)
+CXXFLAGS += -I$(shell lhapdf-config --incdir)
+LDFLAGS  += -Wl,-rpath,$(shell lhapdf-config --libdir)
+LIBS     += -L$(shell lhapdf-config --libdir) -lLHAPDF
+
 .PHONY: all build clean
 
 all: $(EXE)
