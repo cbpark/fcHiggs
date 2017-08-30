@@ -20,7 +20,7 @@ private:
 
 public:
     Hup() = delete;
-    explicit Hup(const Angles &ang, const double y33u)
+    Hup(const Angles &ang, const double y33u)
         : h31u_{0.0}, h32u_{0.0}, h33u_{calc_h33u(ang, y33u)} {}
 
     double c31() const { return h31u_; }
