@@ -9,6 +9,7 @@
 #include "pdf.h"
 #include <memory>
 #include <string>
+#include <vector>
 #include "LHAPDF/AlphaS.h"
 #include "LHAPDF/Info.h"
 #include "LHAPDF/LHAPDF.h"
@@ -17,7 +18,9 @@
 namespace fchiggs {
 std::shared_ptr<LHAPDF::PDF> mkPdf(const std::string &pdfname) {
     LHAPDF::Info &cfg{LHAPDF::getConfig()};
-    // cfg.set_entry("Verbosity", 0);  // make lhapdf quiet
+    cfg.set_entry("Verbosity", 0);  // make lhapdf quiet
+    std::vector<int> flavors = {-5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 21};
+    cfg.set_entry("Flavors", flavors);
 
     LHAPDF::AlphaS *alphas{new LHAPDF::AlphaS_ODE()};
     alphas->setQuarkMass(5, MB);
