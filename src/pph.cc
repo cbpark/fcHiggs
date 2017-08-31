@@ -41,8 +41,9 @@ int main(int argc, char *argv[]) {
     message(appname, "E_{CM} = " + to_string(ECM / 1000.0) + " TeV");
     const double mH = std::atof(argv[1]);
     message(appname, "m_H = " + to_string(mH) + " GeV");
-    const double gammaH = mH / 25000.0;
-    const double qmin = 0.0, qmax = std::sqrt(SBEAM), mtr = mH, gtr = mH;
+    const double gammaH = mH / 10000.0;
+    const double qmin = mH / 2.0, qmax = std::sqrt(SBEAM), mtr = mH,
+                 gtr = mH / 2.0;
     const double mu = mH;
     const fchiggs::Rho rho{qmin, qmax, mtr, gtr, SBEAM};
     double val = fchiggs::rhoValue(rho);
@@ -75,12 +76,9 @@ int main(int argc, char *argv[]) {
     auto result = fchiggs::sigma(sum_w, sum_w_sq, N);
     const double sigma = result.first, err = result.second;
     message(appname, "... done.");
-
-    if (argc == 4) {
-        message(appname,
-                "total cross section = " + to_string(sigma) + " +- " +
-                    to_string(err) + " pb");
-    }
+    message(appname,
+            "total cross section = " + to_string(sigma) + " +- " +
+                to_string(err) + " pb");
 
     if (argc == 5) {
         std::ofstream fout;
