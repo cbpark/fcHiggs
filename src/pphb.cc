@@ -29,6 +29,10 @@ constexpr double SBEAM = ECM * ECM;
 constexpr char PDFNAME[] = "NNPDF23_lo_as_0130_qed";
 constexpr unsigned int N = 800000;
 
+double weight(const fchiggs::Rho &rho, const std::shared_ptr<LHAPDF::PDF> &pdf,
+              const double mh, const fchiggs::Hdown &hd,
+              const fchiggs::Angles &ang);
+
 int main(int argc, char *argv[]) {
     if (argc < 4 || argc > 5) {
         std::cerr << "Usage: " << appname
@@ -43,30 +47,22 @@ int main(int argc, char *argv[]) {
     const double thres = mh + MB;  // it's important to set the threshold.
     const double qmin = thres, qmax = std::sqrt(SBEAM), mtr = thres,
                  gtr = thres;
-    const double mu = mh;
     const fchiggs::Rho rho{qmin, qmax, mtr, gtr, SBEAM};
-    double val = fchiggs::rhoValue(rho);
 
     auto pdf = fchiggs::mkPdf(PDFNAME);
-    const double alpha_s = pdf->alphasQ(mu);
 
     const double tan_beta = std::atof(argv[2]);
     const double cos_alpha_beta = std::atof(argv[3]);
     message(appname,
             "tan(beta) = " + to_string(tan_beta) +
                 ", cos(alpha-beta) = " + to_string(cos_alpha_beta));
-
     const fchiggs::Angles ang{tan_beta, cos_alpha_beta};
     const fchiggs::Hdown hd{ang};
 
     message(appname, "integrating for cross section ...");
     double sum_w = 0, sum_w_sq = 0;
-    for (auto itry = 0; itry != N; ++itry, val = fchiggs::rhoValue(rho)) {
-        const double shat = rho.shat(val);
-        const fchiggs::InitPartons p{SBEAM, shat};
-        const double w =
-            fchiggs::dsigma_dcos_hb(pdf, p, mu, mh, alpha_s, hd, ang) * DELTA *
-            rho.delta() * p.delta_y() * rho.jacobian(val);
+    for (auto itry = 0; itry != N; ++itry) {
+        const double w = weight(rho, pdf, mh, hd, ang);
         sum_w += w;
         sum_w_sq += w * w;
     }
@@ -87,4 +83,18 @@ int main(int argc, char *argv[]) {
         message(appname,
                 "the output has been saved to `" + std::string(argv[4]) + "'.");
     }
+}
+
+double weight(const fchiggs::Rho &rho, const std::shared_ptr<LHAPDF::PDF> &pdf,
+              const double mh, const fchiggs::Hdown &hd,
+              const fchiggs::Angles &ang) {
+    const double val = fchiggs::rhoValue(rho);
+    const double shat = rho.shat(val);
+
+    const double mu = mh;  // renormalization and factorization scales
+    const double alpha_s = pdf->alphasQ(mu);
+    const fchiggs::InitPartons p{SBEAM, shat};
+
+    return fchiggs::dsigma_dcos_hb(pdf, p, mu, mh, alpha_s, hd, ang) * DELTA *
+           rho.delta() * p.delta_y() * rho.jacobian(val);
 }
