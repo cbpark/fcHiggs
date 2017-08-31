@@ -2,6 +2,7 @@ bin
 lib
 tmp
 *.o
+.#*
 *PATH
 *TAGS
 *.dat
