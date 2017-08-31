@@ -12,6 +12,8 @@
 #include <cmath>
 
 constexpr double PI = 3.141592653589793;
+constexpr double TWOPI = 2.0 * PI;
+constexpr double DELTA = 2;
 
 /** top quark mass */
 constexpr double MT = 173.0;

@@ -106,19 +106,17 @@ double sigmaPPH(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
     sigma +=
         pdf->xfxQ(5, x1, mu) * pdf->xfxQ(-5, x2, mu) * sigmaBBH(mh, hd, ang);
 
+    const double pdf_b = pdf->xfxQ(5, x2, mu), pdf_bbar = pdf->xfxQ(-5, x2, mu);
+
     // d b --> H
     auto q_typ = DQuark::Down;
-    sigma +=
-        pdf->xfxQ(1, x1, mu) * pdf->xfxQ(-5, x2, mu) * sigmaQBH(hd, ang, q_typ);
-    sigma +=
-        pdf->xfxQ(-1, x1, mu) * pdf->xfxQ(5, x2, mu) * sigmaQBH(hd, ang, q_typ);
+    sigma += (pdf->xfxQ(1, x1, mu) * pdf_bbar + pdf->xfxQ(-1, x1, mu) * pdf_b) *
+             sigmaQBH(hd, ang, q_typ);
 
     // s b --> H
     q_typ = DQuark::Strange;
-    sigma +=
-        pdf->xfxQ(3, x1, mu) * pdf->xfxQ(-5, x2, mu) * sigmaQBH(hd, ang, q_typ);
-    sigma +=
-        pdf->xfxQ(-3, x1, mu) * pdf->xfxQ(5, x2, mu) * sigmaQBH(hd, ang, q_typ);
+    sigma += (pdf->xfxQ(3, x1, mu) * pdf_bbar + pdf->xfxQ(-3, x1, mu) * pdf_b) *
+             sigmaQBH(hd, ang, q_typ);
 
     return sigma * delta(shat, mh, gammah) / (x1 * x2);
 }
