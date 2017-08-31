@@ -64,12 +64,12 @@ double delta(const double shat, const double mh, const double gammah) {
            (std::pow(shat - mh * mh, 2) + sgammah * sgammah);
 }
 
-double sigmaGGH(const double mh, const double alpha_s, const Hup &hu,
+double sigma_gg(const double mh, const double alpha_s, const Hup &hu,
                 const Hdown &hd, const Angles &ang) {
     return sigma0(mh, alpha_s, hu, hd, ang);
 }
 
-double sigmaBBH(const double mh, const Hdown &hd, const Angles &ang) {
+double sigma_bb(const double mh, const Hdown &hd, const Angles &ang) {
     const double coeff = PI * MB2 / (2.0 * NC * NC * VEW2);
     const double coup =
         ang.cos_alpha() / ang.cos_beta() +
@@ -78,7 +78,7 @@ double sigmaBBH(const double mh, const Hdown &hd, const Angles &ang) {
     return coeff * coup * coup * std::sqrt(beta2);
 }
 
-double sigmaQBH(const Hdown &hd, const Angles &ang, const DQuark &type) {
+double sigma_db(const Hdown &hd, const Angles &ang, const DQuark &type) {
     const double coeff = PI / (8.0 * NC * NC);
     double coup = ang.sin_alpha_beta() / ang.cos_beta();
     if (type == DQuark::Down) {
@@ -91,7 +91,7 @@ double sigmaQBH(const Hdown &hd, const Angles &ang, const DQuark &type) {
     return coeff * coup * coup;
 }
 
-double sigmaPPH(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
+double dsigma_h(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
                 const double mu, const double mh, const double gammah,
                 const double alpha_s, const Hup &hu, const Hdown &hd,
                 const Angles &ang) {
@@ -100,23 +100,23 @@ double sigmaPPH(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
 
     // g g --> H
     double sigma = pdf->xfxQ(21, x1, mu) * pdf->xfxQ(21, x2, mu) *
-                   sigmaGGH(mh, alpha_s, hu, hd, ang);
+                   sigma_gg(mh, alpha_s, hu, hd, ang);
 
     // b b --> H
     sigma +=
-        pdf->xfxQ(5, x1, mu) * pdf->xfxQ(-5, x2, mu) * sigmaBBH(mh, hd, ang);
+        pdf->xfxQ(5, x1, mu) * pdf->xfxQ(-5, x2, mu) * sigma_bb(mh, hd, ang);
 
     const double pdf_b = pdf->xfxQ(5, x2, mu), pdf_bbar = pdf->xfxQ(-5, x2, mu);
 
     // d b --> H
     auto q_typ = DQuark::Down;
     sigma += (pdf->xfxQ(1, x1, mu) * pdf_bbar + pdf->xfxQ(-1, x1, mu) * pdf_b) *
-             sigmaQBH(hd, ang, q_typ);
+             sigma_db(hd, ang, q_typ);
 
     // s b --> H
     q_typ = DQuark::Strange;
     sigma += (pdf->xfxQ(3, x1, mu) * pdf_bbar + pdf->xfxQ(-3, x1, mu) * pdf_b) *
-             sigmaQBH(hd, ang, q_typ);
+             sigma_db(hd, ang, q_typ);
 
     return sigma * delta(shat, mh, gammah) / (x1 * x2);
 }

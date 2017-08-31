@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
         const double shat = rho.shat(val);
         const fchiggs::InitPartons p{SBEAM, shat};
         const double w =
-            fchiggs::sigmaPPH(pdf, p, mu, mH, gammaH, alpha_s, hu, hd, ang) *
+            fchiggs::dsigma_h(pdf, p, mu, mH, gammaH, alpha_s, hu, hd, ang) *
             rho.delta() * p.delta_y() * rho.jacobian(val);
         sum_w += w;
         sum_w_sq += w * w;

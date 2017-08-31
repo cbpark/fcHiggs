@@ -16,17 +16,7 @@
 #include "initial_states.h"
 
 namespace fchiggs {
-double sigmaGGH(const double shat, const double mh, const double gammah,
-                const double alpha_s, const Hup &hu, const Hdown &hd,
-                const Angles &ang);
-
-double sigmaBBH(const double shat, const double mh, const double gammah,
-                const Hdown &hd, const Angles &ang);
-
-double sigmaQBH(const double shat, const double mh, const double gammah,
-                const Hdown &hd, const Angles &ang, const DQuark &type);
-
-double sigmaPPH(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
+double dsigma_h(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
                 const double mu, const double mh, const double gammah,
                 const double alpha_s, const Hup &hu, const Hdown &hd,
                 const Angles &ang);
