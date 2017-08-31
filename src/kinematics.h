@@ -81,7 +81,9 @@ public:
           md2_(md * md),
           costh_(costh(DELTA)),
           sinth_(std::sqrt(1.0 - costh_ * costh_)),
-          phi_(TWOPI * getRandom()) {}
+          phi_(TWOPI * getRandom()) {
+        init();
+    }
 
     FourMomentum p1() const;
     FourMomentum k1() const;
