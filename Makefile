@@ -2,9 +2,9 @@ PKGNAME  := fcHiggs
 SRCDIR   := src
 BINDIR   := bin
 LIBDIR   := lib
-CXXFLAGS := -g -O2 -m64 -march=native -Wall -Wextra -std=c++14 -pedantic -I$(SRCDIR) \
+CXXFLAGS := -g -O3 -m64 -march=native -Wall -Wextra -std=c++14 -pedantic -I$(SRCDIR) \
 	$(CXXFLAGS)
-LDFLAGS  := -O2 -m64 $(LDFLAGS)
+LDFLAGS  := -O3 -m64 $(LDFLAGS)
 LIBS     :=
 AR       := ar crs
 MKDIR    := mkdir -p
