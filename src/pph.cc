@@ -39,12 +39,12 @@ int main(int argc, char *argv[]) {
     message(appname, "p p --> H");
 
     message(appname, "E_{CM} = " + to_string(ECM / 1000.0) + " TeV");
-    const double mH = std::atof(argv[1]);
-    message(appname, "m_H = " + to_string(mH) + " GeV");
-    const double gammaH = mH / 10000.0;
-    const double qmin = mH / 2.0, qmax = std::sqrt(SBEAM), mtr = mH,
-                 gtr = mH / 2.0;
-    const double mu = mH;
+    const double mh = std::atof(argv[1]);
+    message(appname, "m_H = " + to_string(mh) + " GeV");
+    const double gammaH = mh / 10000.0;
+    const double qmin = mh / 2.0, qmax = std::sqrt(SBEAM), mtr = mh,
+                 gtr = mh / 2.0;
+    const double mu = mh;
     const fchiggs::Rho rho{qmin, qmax, mtr, gtr, SBEAM};
     double val = fchiggs::rhoValue(rho);
 
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
         const double shat = rho.shat(val);
         const fchiggs::InitPartons p{SBEAM, shat};
         const double w =
-            fchiggs::dsigma_h(pdf, p, mu, mH, gammaH, alpha_s, hu, hd, ang) *
+            fchiggs::dsigma_h(pdf, p, mu, mh, gammaH, alpha_s, hu, hd, ang) *
             rho.delta() * p.delta_y() * rho.jacobian(val);
         sum_w += w;
         sum_w_sq += w * w;
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
         std::ofstream fout;
         fout.open(argv[4], std::ios_base::app);
         fout << std::right << std::fixed << std::setw(7) << std::setprecision(2)
-             << mH << std::setw(14) << std::setprecision(9) << sigma
+             << mh << std::setw(14) << std::setprecision(9) << sigma
              << std::setw(14) << err << '\n';
         message(appname,
                 "the output has been saved to `" + std::string(argv[4]) + "'.");

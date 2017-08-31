@@ -31,7 +31,7 @@ double dsigma_dt_dg(const double shat, const double mh, const double alpha_s,
         coup *= 0.0;
     }
 
-    CM22 pmom{shat, mh, 0.0};
+    CM22 pmom{shat, mh, 0.0};  // neglect the light quark masses
     const double s = shat, t = pmom.t_hat(), mh2 = mh * mh;
     const double amp2 = -t / s - s / t + MB2 * (1.0 / s + 1.0 / t) -
                         MB2 * mh2 / (t * t) +
