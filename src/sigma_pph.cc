@@ -94,13 +94,13 @@ double sigma_db(const Hdown &hd, const Angles &ang, const DQuark &type) {
 double dsigma_h(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
                 const double mu, const double mh, const double gammah,
                 const double alpha_s, const Hup &hu, const Hdown &hd,
-                const Angles &ang) {
+                const Angles &ang, const double kgg) {
     const double x1 = p.x1(), x2 = p.x2();
     const double shat = p.shat();
 
     // g g --> H
     double sigma = pdf->xfxQ(21, x1, mu) * pdf->xfxQ(21, x2, mu) *
-                   sigma_gg(mh, alpha_s, hu, hd, ang);
+                   sigma_gg(mh, alpha_s, hu, hd, ang) * kgg;
 
     // b b --> H
     sigma +=

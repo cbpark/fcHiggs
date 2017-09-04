@@ -28,6 +28,7 @@ constexpr double ECM = 14000.0;
 constexpr double SBEAM = ECM * ECM;
 constexpr char PDFNAME[] = "NNPDF23_lo_as_0130_qed";
 constexpr unsigned int N = 8500000;
+constexpr double KGG = 2.5;
 const double Y33U = SQRT2 * MT / VEW;
 
 double weight(const fchiggs::Rho &rho, const std::shared_ptr<LHAPDF::PDF> &pdf,
@@ -97,6 +98,7 @@ double weight(const fchiggs::Rho &rho, const std::shared_ptr<LHAPDF::PDF> &pdf,
     const double alpha_s = pdf->alphasQ(mu);
     const fchiggs::InitPartons p{SBEAM, shat};
 
-    return fchiggs::dsigma_h(pdf, p, mu, mh, gammah, alpha_s, hu, hd, ang) *
+    return fchiggs::dsigma_h(pdf, p, mu, mh, gammah, alpha_s, hu, hd, ang,
+                             KGG) *
            rho.delta() * p.delta_y() * rho.jacobian(val);
 }

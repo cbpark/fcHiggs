@@ -19,7 +19,7 @@ namespace fchiggs {
 double dsigma_h(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
                 const double mu, const double mh, const double gammah,
                 const double alpha_s, const Hup &hu, const Hdown &hd,
-                const Angles &ang);
+                const Angles &ang, const double kgg);
 }  // namespace fchiggs
 
 #endif  // FCHIGGS_SRC_SIGMA_PPH_H_
