@@ -9,9 +9,10 @@
 #ifndef FCHIGGS_SRC_GAMMA_H_H_
 #define FCHIGGS_SRC_GAMMA_H_H_
 
-#include "utils.h"
+#include <ostream>
 #include "angles.h"
 #include "couplings.h"
+#include "utils.h"
 
 namespace fchiggs {
 using GH3 = ValueType<double>;
@@ -49,6 +50,9 @@ public:
     double br_aa() const { return gamma_aa_ / gamma_total_; }
     double br_gg() const { return gamma_gg_ / gamma_total_; }
     double br_hh() const { return gamma_hh_ / gamma_total_; }
+
+    friend std::ostream &operator<<(std::ostream &os,
+                                    const HiggsDecayWidth &hdec);
 
 private:
     void init_gamma(const double mh, const double mh_sm, const double mzp,

@@ -9,11 +9,14 @@
 #include "gamma_h.h"
 #include <cmath>
 #include <complex>
+#include <iomanip>
+#include <ostream>
 #include "angles.h"
 #include "constants.h"
 #include "couplings.h"
 
 using std::complex;
+using std::setw;
 
 namespace fchiggs {
 double gamma_bd(const double mh, const Hdown &c, const Angles &ang,
@@ -172,5 +175,16 @@ void HiggsDecayWidth::init_gamma(const double mh, const double mh_sm,
     gamma_total_ = gamma_bd_ + gamma_bs_ + gamma_bb_ + gamma_tt_ +
                    gamma_tautau_ + gamma_ww_ + gamma_zz_ + gamma_zpzp_ +
                    gamma_aa_ + gamma_gg_ + gamma_hh_;
+}
+
+std::ostream &operator<<(std::ostream &os, const HiggsDecayWidth &hdec) {
+    double br_bq = hdec.br_bd() + hdec.br_bs();
+    os << std::right << std::fixed << setw(10) << std::setprecision(6) << br_bq
+       << setw(10) << hdec.br_bb() << setw(10) << hdec.br_tt() << setw(10)
+       << hdec.br_tautau() << setw(10) << hdec.br_ww() << setw(10)
+       << hdec.br_zz() << setw(10) << hdec.br_zpzp() << setw(10) << hdec.br_aa()
+       << setw(10) << hdec.br_gg() << setw(10) << hdec.br_hh();
+
+    return os;
 }
 }  // namespace fchiggs

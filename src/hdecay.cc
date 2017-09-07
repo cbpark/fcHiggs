@@ -56,5 +56,5 @@ int main(int argc, char *argv[]) {
         mh,  MHSM,  MZP, alpha_s, fchiggs::GZPX(GZPX), fchiggs::GH3(ghhh),
         cup, cdown, ang};
 
-    std::cout << hdecay.br_bb() << '\n';
+    std::cout << hdecay << '\n';
 }
