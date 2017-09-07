@@ -23,6 +23,10 @@ constexpr double MT2 = MT * MT;
 constexpr double MB = 4.7;
 constexpr double MB2 = MB * MB;
 
+/** tau lepton mass */
+constexpr double MTAU = 1.777;
+constexpr double MTAU2 = MTAU * MTAU;
+
 /** Z boson mass */
 constexpr double MZ = 91.188;
 
