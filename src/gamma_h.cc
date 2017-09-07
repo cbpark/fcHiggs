@@ -171,29 +171,31 @@ double gamma_hh(const double mh, const double mh_sm, const double ghhh) {
     return coeff * fac;
 }
 
-void HiggsDecayWidth::init_gamma(const double mh, const double mh_sm,
-                                 const double mzp, const double alpha_s,
-                                 const double gx, const double ghhh,
-                                 const Hup &cup, const Hdown &cdown,
-                                 const Angles &ang) {
+void HiggsDecayWidth::init_gamma(const double mh_sm, const double mzp,
+                                 const double alpha_s, const double gx,
+                                 const double ghhh, const Hup &cup,
+                                 const Hdown &cdown, const Angles &ang) {
     // the factor 2 is to take into account the charge conjugation.
-    gamma_bd_ = 2 * gamma_bd(mh, cdown, ang, DQuark::Down);
-    gamma_bs_ = 2 * gamma_bd(mh, cdown, ang, DQuark::Strange);
-    gamma_cc_ = gamma_cc(mh, ang);
-    gamma_bb_ = gamma_bb(mh, cdown, ang);
-    gamma_tt_ = gamma_tt(mh, cup, ang);
-    gamma_mumu_ = gamma_mumu(mh, ang);
-    gamma_tautau_ = gamma_tautau(mh, ang);
-    gamma_ww_ = gamma_ww(mh, ang);
-    gamma_zz_ = gamma_zz(mh, ang);
-    gamma_zpzp_ = gamma_zpzp(mh, mzp, gx, ang);
-    gamma_aa_ = gamma_aa(mh, cup, cdown, ang);
-    gamma_gg_ = gamma_gg(mh, cup, cdown, alpha_s);
-    gamma_hh_ = gamma_hh(mh, mh_sm, ghhh);
+    gamma_bd_ = 2 * gamma_bd(mh_, cdown, ang, DQuark::Down);
+    gamma_bs_ = 2 * gamma_bd(mh_, cdown, ang, DQuark::Strange);
+    gamma_cc_ = gamma_cc(mh_, ang);
+    gamma_bb_ = gamma_bb(mh_, cdown, ang);
+    gamma_tt_ = gamma_tt(mh_, cup, ang);
+    gamma_mumu_ = gamma_mumu(mh_, ang);
+    gamma_tautau_ = gamma_tautau(mh_, ang);
+    gamma_ww_ = gamma_ww(mh_, ang);
+    gamma_zz_ = gamma_zz(mh_, ang);
+    gamma_zpzp_ = gamma_zpzp(mh_, mzp, gx, ang);
+    gamma_aa_ = gamma_aa(mh_, cup, cdown, ang);
+    gamma_gg_ = gamma_gg(mh_, cup, cdown, alpha_s);
+    gamma_hh_ = gamma_hh(mh_, mh_sm, ghhh);
 
-    gamma_total_ = gamma_bd_ + gamma_bs_ + gamma_bb_ + gamma_tt_ +
-                   gamma_tautau_ + gamma_ww_ + gamma_zz_ + gamma_zpzp_ +
-                   gamma_aa_ + gamma_gg_ + gamma_hh_;
+    gamma_total_ = gamma_bd_ + gamma_bs_ + gamma_cc_ + gamma_bb_ + gamma_tt_;
+    gamma_total_ += gamma_mumu_ + gamma_tautau_;
+    gamma_total_ += gamma_ww_ + gamma_zz_;
+    gamma_total_ += gamma_zpzp_;
+    gamma_total_ += gamma_aa_ + gamma_gg_;
+    gamma_total_ += gamma_hh_;
 }
 
 void printOutput(const std::string &mode, const double br) {
@@ -219,9 +221,11 @@ std::ostream &operator<<(std::ostream &os, const HiggsDecayWidth &hdec) {
     int width = 12;
     int pre = 8;
 
-    os << std::right << std::fixed << std::setprecision(pre) << setw(width)
-       << hdec.br_bq() << setw(width) << hdec.br_cc() << setw(width)
-       << hdec.br_bb() << setw(width) << hdec.br_tt();
+    os << std::right << std::fixed << std::setprecision(2) << setw(7)
+       << hdec.mh_;
+    os << std::setprecision(pre) << setw(width) << hdec.br_bq() << setw(width)
+       << hdec.br_cc() << setw(width) << hdec.br_bb() << setw(width)
+       << hdec.br_tt();
     os << setw(width) << hdec.br_mumu() << setw(width) << hdec.br_tautau();
     os << setw(width) << hdec.br_ww() << setw(width) << hdec.br_zz();
     os << setw(width) << hdec.br_zpzp();

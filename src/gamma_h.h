@@ -20,6 +20,7 @@ using GZPX = ValueType<double>;
 
 class HiggsDecayWidth {
 private:
+    double mh_;
     double gamma_bd_, gamma_bs_;
     double gamma_cc_, gamma_bb_, gamma_tt_;
     double gamma_mumu_, gamma_tautau_;
@@ -34,9 +35,9 @@ public:
     HiggsDecayWidth() = delete;
     HiggsDecayWidth(const double mh, const double mh_sm, const double mzp,
                     const double alpha_s, const GZPX &gx, const GH3 &ghhh,
-                    const Hup &cup, const Hdown &cdown, const Angles &ang) {
-        init_gamma(mh, mh_sm, mzp, alpha_s, gx.value, ghhh.value, cup, cdown,
-                   ang);
+                    const Hup &cup, const Hdown &cdown, const Angles &ang)
+        : mh_(mh) {
+        init_gamma(mh_sm, mzp, alpha_s, gx.value, ghhh.value, cup, cdown, ang);
     }
 
     double br_bd() const { return gamma_bd_ / gamma_total_; }
@@ -60,9 +61,9 @@ public:
                                     const HiggsDecayWidth &hdec);
 
 private:
-    void init_gamma(const double mh, const double mh_sm, const double mzp,
-                    const double alpha_s, const double gx, const double ghhh,
-                    const Hup &cup, const Hdown &cdown, const Angles &ang);
+    void init_gamma(const double mh_sm, const double mzp, const double alpha_s,
+                    const double gx, const double ghhh, const Hup &cup,
+                    const Hdown &cdown, const Angles &ang);
 };
 }  // namespace fchiggs
 
