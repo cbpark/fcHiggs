@@ -11,7 +11,7 @@ MKDIR    := mkdir -p
 RM       := rm -f
 
 # Targets
-EXE    := $(BINDIR)/pph $(BINDIR)/pphb
+EXE    := $(BINDIR)/pph $(BINDIR)/pphb $(BINDIR)/hdecay
 EXESRC := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ := $(EXESRC:.cc=.o)
 LIB    := $(LIBDIR)/lib$(PKGNAME).a
