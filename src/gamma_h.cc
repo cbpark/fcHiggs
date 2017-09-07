@@ -10,7 +10,8 @@
 #include <cmath>
 #include <complex>
 #include <iomanip>
-#include <ostream>
+#include <iostream>
+#include <string>
 #include "angles.h"
 #include "constants.h"
 #include "couplings.h"
@@ -37,32 +38,47 @@ double gamma_bd(const double mh, const Hdown &c, const Angles &ang,
     return coeff * fac;
 }
 
-double gamma_qq(const double mh, const double mq, const double c,
-                const Angles &ang) {
+double gamma_qq(const double mh, const double mq, const double lambda_q) {
     if (mh <= 2.0 * mq) { return 0; }
 
-    double coup = SQRT2 * mq * ang.cos_alpha() / (VEW * ang.cos_beta()) +
-                  c * ang.sin_alpha_beta() / ang.cos_beta();
-    double coeff = NC * coup * coup / (16.0 * PI);
+    double coeff = NC * lambda_q * lambda_q / (16.0 * PI);
     double fac = mh * std::pow(1.0 - 4.0 * mq * mq / (mh * mh), 1.5);
     return coeff * fac;
 }
 
+double gamma_cc(const double mh, const Angles &ang) {
+    double lambda_c = SQRT2 * MC * ang.cos_alpha() / (VEW * ang.cos_beta());
+    return gamma_qq(mh, MC, lambda_c);
+}
+
 double gamma_bb(const double mh, const Hdown &c, const Angles &ang) {
-    return gamma_qq(mh, MB, c.c33(), ang);
+    double lambda_b = SQRT2 * MB * ang.cos_alpha() / (VEW * ang.cos_beta()) +
+                      c.c33() * ang.sin_alpha_beta() / ang.cos_beta();
+    return gamma_qq(mh, MB, lambda_b);
 }
 
 double gamma_tt(const double mh, const Hup &c, const Angles &ang) {
-    return gamma_qq(mh, MT, c.c33(), ang);
+    double lambda_t = SQRT2 * MT * ang.cos_alpha() / (VEW * ang.cos_beta()) +
+                      c.c33() * ang.sin_alpha_beta() / ang.cos_beta();
+    return gamma_qq(mh, MT, lambda_t);
+}
+
+double gamma_ll(const double mh, const double ml, const Angles &ang) {
+    if (mh <= 2.0 * ml) { return 0; }
+
+    double ml2 = ml * ml;
+    double coeff = ml2 * std::pow(ang.cos_alpha(), 2) /
+                   (8.0 * PI * VEW2 * std::pow(ang.cos_beta(), 2));
+    double fac = mh * std::pow(1.0 - 4 * ml2 / (mh * mh), 1.5);
+    return coeff * fac;
+}
+
+double gamma_mumu(const double mh, const Angles &ang) {
+    return gamma_ll(mh, MMU, ang);
 }
 
 double gamma_tautau(const double mh, const Angles &ang) {
-    if (mh <= 2.0 * MTAU) { return 0; }
-
-    double coeff = MTAU2 * std::pow(ang.cos_alpha(), 2) /
-                   (8.0 * PI * VEW2 * std::pow(ang.cos_beta(), 2));
-    double fac = mh * std::pow(1.0 - 4 * MTAU2 / (mh * mh), 1.5);
-    return coeff * fac;
+    return gamma_ll(mh, MTAU, ang);
 }
 
 double gamma_vv(const double mh, const double mv, const double coeff) {
@@ -160,10 +176,13 @@ void HiggsDecayWidth::init_gamma(const double mh, const double mh_sm,
                                  const double gx, const double ghhh,
                                  const Hup &cup, const Hdown &cdown,
                                  const Angles &ang) {
+    // the factor 2 is to take into account the charge conjugation.
     gamma_bd_ = 2 * gamma_bd(mh, cdown, ang, DQuark::Down);
     gamma_bs_ = 2 * gamma_bd(mh, cdown, ang, DQuark::Strange);
+    gamma_cc_ = gamma_cc(mh, ang);
     gamma_bb_ = gamma_bb(mh, cdown, ang);
     gamma_tt_ = gamma_tt(mh, cup, ang);
+    gamma_mumu_ = gamma_mumu(mh, ang);
     gamma_tautau_ = gamma_tautau(mh, ang);
     gamma_ww_ = gamma_ww(mh, ang);
     gamma_zz_ = gamma_zz(mh, ang);
@@ -177,13 +196,37 @@ void HiggsDecayWidth::init_gamma(const double mh, const double mh_sm,
                    gamma_aa_ + gamma_gg_ + gamma_hh_;
 }
 
+void printOutput(const std::string &mode, const double br) {
+    std::cout << "H --> " + mode << ":\t" << br << '\n';
+}
+
+void HiggsDecayWidth::printBR() const {
+    printOutput("bq (q = d, s)", br_bq());
+    printOutput("cc", br_cc());
+    printOutput("bb", br_bb());
+    printOutput("tt", br_tt());
+    printOutput("mu+mu-", br_mumu());
+    printOutput("tau+tau-", br_tautau());
+    printOutput("ww", br_ww());
+    printOutput("zz", br_zz());
+    printOutput("z'z'", br_zpzp());
+    printOutput("aa", br_aa());
+    printOutput("gg", br_gg());
+    printOutput("hh", br_hh());
+}
+
 std::ostream &operator<<(std::ostream &os, const HiggsDecayWidth &hdec) {
-    double br_bq = hdec.br_bd() + hdec.br_bs();
-    os << std::right << std::fixed << setw(10) << std::setprecision(6) << br_bq
-       << setw(10) << hdec.br_bb() << setw(10) << hdec.br_tt() << setw(10)
-       << hdec.br_tautau() << setw(10) << hdec.br_ww() << setw(10)
-       << hdec.br_zz() << setw(10) << hdec.br_zpzp() << setw(10) << hdec.br_aa()
-       << setw(10) << hdec.br_gg() << setw(10) << hdec.br_hh();
+    int width = 12;
+    int pre = 8;
+
+    os << std::right << std::fixed << std::setprecision(pre) << setw(width)
+       << hdec.br_bq() << setw(width) << hdec.br_cc() << setw(width)
+       << hdec.br_bb() << setw(width) << hdec.br_tt();
+    os << setw(width) << hdec.br_mumu() << setw(width) << hdec.br_tautau();
+    os << setw(width) << hdec.br_ww() << setw(width) << hdec.br_zz();
+    os << setw(width) << hdec.br_zpzp();
+    os << setw(width) << hdec.br_aa() << setw(width) << hdec.br_gg();
+    os << setw(width) << hdec.br_hh();
 
     return os;
 }

@@ -21,8 +21,8 @@ using GZPX = ValueType<double>;
 class HiggsDecayWidth {
 private:
     double gamma_bd_, gamma_bs_;
-    double gamma_bb_, gamma_tt_;
-    double gamma_tautau_;
+    double gamma_cc_, gamma_bb_, gamma_tt_;
+    double gamma_mumu_, gamma_tautau_;
     double gamma_ww_, gamma_zz_;
     double gamma_zpzp_;
     double gamma_aa_, gamma_gg_;
@@ -41,8 +41,11 @@ public:
 
     double br_bd() const { return gamma_bd_ / gamma_total_; }
     double br_bs() const { return gamma_bs_ / gamma_total_; }
+    double br_bq() const { return br_bd() + br_bs(); }
+    double br_cc() const { return gamma_cc_ / gamma_total_; }
     double br_bb() const { return gamma_bb_ / gamma_total_; }
     double br_tt() const { return gamma_tt_ / gamma_total_; }
+    double br_mumu() const { return gamma_mumu_ / gamma_total_; }
     double br_tautau() const { return gamma_tautau_ / gamma_total_; }
     double br_ww() const { return gamma_ww_ / gamma_total_; }
     double br_zz() const { return gamma_zz_ / gamma_total_; }
@@ -50,6 +53,8 @@ public:
     double br_aa() const { return gamma_aa_ / gamma_total_; }
     double br_gg() const { return gamma_gg_ / gamma_total_; }
     double br_hh() const { return gamma_hh_ / gamma_total_; }
+
+    void printBR() const;
 
     friend std::ostream &operator<<(std::ostream &os,
                                     const HiggsDecayWidth &hdec);

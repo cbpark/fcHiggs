@@ -24,6 +24,14 @@ constexpr double MT2 = MT * MT;
 constexpr double MB = 4.7;
 constexpr double MB2 = MB * MB;
 
+/** charm quark mass */
+constexpr double MC = 1.27;
+constexpr double MC2 = MC * MC;
+
+/** muon mass */
+constexpr double MMU = 105.658e-3;
+constexpr double MMU2 = MMU * MMU;
+
 /** tau lepton mass */
 constexpr double MTAU = 1.777;
 constexpr double MTAU2 = MTAU * MTAU;
