@@ -12,6 +12,7 @@
 #include <cmath>
 
 constexpr double PI = 3.141592653589793;
+constexpr double PI3 = 31.006276680299816;
 constexpr double TWOPI = 2.0 * PI;
 constexpr double DELTA = 2;
 
@@ -27,8 +28,13 @@ constexpr double MB2 = MB * MB;
 constexpr double MTAU = 1.777;
 constexpr double MTAU2 = MTAU * MTAU;
 
+/** W boson mass */
+constexpr double MW = 80.419;
+constexpr double MW2 = MW * MW;
+
 /** Z boson mass */
 constexpr double MZ = 91.188;
+constexpr double MZ2 = MZ * MZ;
 
 constexpr double GF = 1.1663787e-5;
 
@@ -40,6 +46,9 @@ const double VEW = std::sqrt(VEW2);
 
 /** alpha_s (MZ) */
 constexpr double ALPHAS = 0.118;
+
+/** alpha (MW) */
+constexpr double ALPHA = 1.0 / 128;
 
 constexpr int NC = 3;
 
