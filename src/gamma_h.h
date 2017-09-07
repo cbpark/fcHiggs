@@ -9,17 +9,11 @@
 #ifndef FCHIGGS_SRC_GAMMA_H_H_
 #define FCHIGGS_SRC_GAMMA_H_H_
 
+#include "utils.h"
 #include "angles.h"
 #include "couplings.h"
 
 namespace fchiggs {
-template <typename T>
-struct ValueType {
-    T value;
-    ValueType<T>() : value(0.0) {}
-    explicit ValueType<T>(const T v) : value(v) {}
-};
-
 using GH3 = ValueType<double>;
 using GZPX = ValueType<double>;
 

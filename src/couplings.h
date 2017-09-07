@@ -10,6 +10,7 @@
 #define FCHIGGS_SRC_COUPLINGS_H_
 
 #include "angles.h"
+#include "utils.h"
 
 namespace fchiggs {
 enum class DQuark { Down, Strange, Bottom };
@@ -45,6 +46,33 @@ public:
 
 private:
     void init(const Angles &ang);
+};
+
+using Mu = ValueType<double>;
+using Vs = ValueType<double>;
+
+class HQuartic {
+private:
+    Angles ang_;
+    double lambda1_, lambda2_, lambda34_;
+
+public:
+    HQuartic() = delete;
+    HQuartic(const double mh1, const double mh2, const Mu &mu, const Vs &vs,
+             const Angles &ang)
+        : ang_(ang) {
+        init_lambda(mh1, mh2, mu.value, vs.value);
+    }
+
+    double lambda1() const { return lambda1_; }
+    double lambda2() const { return lambda2_; }
+    double lambda34() const { return lambda34_; }
+
+    double trilinear() const;
+
+private:
+    void init_lambda(const double mh1, const double mh2, const double mu,
+                     const double vs);
 };
 }  // namespace fchiggs
 

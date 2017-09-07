@@ -15,28 +15,29 @@ namespace fchiggs {
 class Angles {
 private:
     double sin_alpha_, cos_alpha_;
-    double sin_beta_, cos_beta_;
+    double sin_beta_, cos_beta_, tan_beta_;
     double sin_alpha_beta_, cos_alpha_beta_;
 
 public:
     Angles() = delete;
     Angles(const double tan_beta, const double cos_alpha_beta)
-        : cos_alpha_beta_(cos_alpha_beta) {
-        initBetas(tan_beta);
+        : tan_beta_(tan_beta), cos_alpha_beta_(cos_alpha_beta) {
+        initBetas();
     }
 
     double sin_alpha() const { return sin_alpha_; }
     double cos_alpha() const { return cos_alpha_; }
     double sin_beta() const { return sin_beta_; }
     double cos_beta() const { return cos_beta_; }
+    double tan_beta() const { return tan_beta_; }
     double sin_alpha_beta() const { return sin_alpha_beta_; }
     double cos_alpha_beta() const { return cos_alpha_beta_; }
 
 private:
-    void initBetas(const double tanbeta) {
-        const double beta = std::atan(tanbeta);
+    void initBetas() {
+        const double beta = std::atan(tan_beta_);
         cos_beta_ = std::cos(beta);
-        sin_beta_ = cos_beta_ * tanbeta;
+        sin_beta_ = cos_beta_ * tan_beta_;
 
         const double alpha = beta + acos(cos_alpha_beta_);
         sin_alpha_ = std::sin(alpha);

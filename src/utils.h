@@ -14,6 +14,13 @@
 #include "constants.h"
 
 namespace fchiggs {
+template <typename T>
+struct ValueType {
+    T value;
+    ValueType<T>() : value(0.0) {}
+    explicit ValueType<T>(const T v) : value(v) {}
+};
+
 double getRandom();
 
 inline double lambda12(const double x, const double y, const double z) {
