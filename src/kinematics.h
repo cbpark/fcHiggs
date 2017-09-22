@@ -65,20 +65,21 @@ double deltaR(const FourMomentum &p1, const FourMomentum &p2);
 /**
  *  Particle momenta of 2 --> 2 process at the CM frame.
  *
- *  d(p1) g(k1) --> b(p2) H(k2)
+ *  qin(p1) g(k1) --> qout(p2) H(k2)
  */
 class CM22 {
 private:
-    double s_, mh2_, md2_;
+    double s_, mh2_, mqin2_, mqout2_;
     double costh_, sinth_, phi_;
     double pin_, pfin_;
 
 public:
     CM22() = delete;
-    CM22(const double s, const double mh, const double md)
+    CM22(const double s, const double mh, const double mqin, const double mqout)
         : s_(s),
           mh2_(mh * mh),
-          md2_(md * md),
+          mqin2_(mqin * mqin),
+          mqout2_(mqout * mqout),
           costh_(costh(DELTA)),
           sinth_(std::sqrt(1.0 - costh_ * costh_)),
           phi_(TWOPI * getRandom()) {

@@ -44,28 +44,28 @@ double deltaR(const FourMomentum &p1, const FourMomentum &p2) {
 
 void CM22::init() {
     const double e = 2.0 * std::sqrt(s_);
-    pin_ = (s_ - md2_) / e;
-    pfin_ = lambda12(s_, mh2_, MB2) / e;
+    pin_ = (s_ - mqin2_) / e;
+    pfin_ = lambda12(s_, mh2_, mqout2_) / e;
 }
 
 FourMomentum CM22::p1() const {
-    const double energy = (s_ + md2_) / (2.0 * std::sqrt(s_));
+    const double energy = (s_ + mqin2_) / (2.0 * std::sqrt(s_));
     return {energy, 0, 0, pin_};
 }
 
 FourMomentum CM22::k1() const {
-    const double energy = (s_ - md2_) / (2.0 * std::sqrt(s_));
+    const double energy = (s_ - mqin2_) / (2.0 * std::sqrt(s_));
     return {energy, 0, 0, -pin_};
 }
 
 FourMomentum CM22::p2() const {
-    const double energy = (s_ - mh2_ + MB2) / (2.0 * std::sqrt(s_));
+    const double energy = (s_ - mh2_ + mqout2_) / (2.0 * std::sqrt(s_));
     return {energy, -pfin_ * sinth_ * std::cos(phi_),
             -pfin_ * sinth_ * std::sin(phi_), -pfin_ * costh_};
 }
 
 FourMomentum CM22::k2() const {
-    const double energy = (s_ + mh2_ - MB2) / (2.0 * std::sqrt(s_));
+    const double energy = (s_ + mh2_ - mqout2_) / (2.0 * std::sqrt(s_));
     return {energy, pfin_ * sinth_ * std::cos(phi_),
             pfin_ * sinth_ * std::sin(phi_), pfin_ * costh_};
 }
