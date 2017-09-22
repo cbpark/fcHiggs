@@ -17,60 +17,63 @@
 #include "utils.h"
 
 namespace fchiggs {
-double dsigma_dt_dg(const double shat, const double mh, const double alpha_s,
-                    const Hdown &hd, const Angles &ang, const DQuark &type) {
-    if (shat < std::pow(mh + MB, 2)) { return 0.0; }
+/**
+ * differential cross secion for qin(p1) g(k1) --> qout(p2) H(k2) process.
+ */
+double dsigma_dt(const double shat, const double mh, const double mqin,
+                 const double mqout, const double alpha_s, const double g,
+                 const double gtilde) {
+    if (shat < std::pow(mh + mqout, 2)) { return 0.0; }
 
-    const double coeff = alpha_s / (32.0 * NC * shat * shat);
-    double coup = ang.sin_alpha_beta() / ang.cos_beta();
-    if (type == DQuark::Down) {
-        coup *= hd.c13();
-    } else if (type == DQuark::Strange) {
-        coup *= hd.c23();
-    } else {
-        coup *= 0.0;
-    }
+    CM22 pmom{shat, mh, mqin, mqout};
+    const double s = shat, t = pmom.t_hat();
+    const double mh2 = mh * mh, mqin2 = mqin * mqin, mqout2 = mqout * mqout;
 
-    CM22 pmom{shat, mh, 0.0};  // neglect the light quark masses
-    const double s = shat, t = pmom.t_hat(), mh2 = mh * mh;
-    const double amp2 = -t / s - s / t + MB2 * (1.0 / s + 1.0 / t) -
-                        MB2 * mh2 / (t * t) +
-                        2.0 * (s - mh2 + MB2) * (mh2 - t) / (s * t);
+    const double F1 = s * t - mqin2 * mqout2, F2 = s + t - mqin2 - mqout2;
+    const double G1 = mh2 - mqout2 - s, G2 = mh2 - mqin2 - t;
+    const double SS = s - mqin2, TT = t - mqout2;
+    const double g2 = g * g, gt2 = gtilde * gtilde;
 
-    return coeff * coup * coup * amp2;
+    double sigma =
+        (g2 + gt2) * ((2 * F1 - F2 * F2 - 2 * G1 * G2) / (SS * TT) +
+                      2 * mqin2 * G1 / (SS * SS) + 2 * mqout2 * G2 / (TT * TT));
+    sigma += (g2 - gt2) * 4.0 * mqin * mqout * mh2 / (SS * TT) *
+             (1.0 - F1 * F2 / (mh2 * SS * TT));
+
+    sigma *= alpha_s / (8.0 * NC * SS * SS);
+    return sigma;
+}
+
+double dsigma_dcos(const double shat, const double mh, const double mqin,
+                   const double mqout, const double alpha_s, const double g,
+                   const double gtilde) {
+    const double dsigma = dsigma_dt(shat, mh, mqin, mqout, alpha_s, g, gtilde);
+    const double jacobian = 0.5 * (shat - mqin * mqin) *
+                            lambda12(shat, mh * mh, mqout * mqout) / shat;
+    return dsigma * jacobian;
 }
 
 double dsigma_dcos_dg(const double shat, const double mh, const double alpha_s,
                       const Hdown &hd, const Angles &ang, const DQuark &type) {
-    const double jacobian = 0.5 * lambda12(shat, mh * mh, MB2);
-    const double dsigma_dt = dsigma_dt_dg(shat, mh, alpha_s, hd, ang, type);
-    return dsigma_dt * jacobian;
-}
-
-double dsigma_dt_bg(const double shat, const double mh, const double alpha_s,
-                    const Hdown &hd, const Angles &ang) {
-    if (shat < std::pow(mh + MB, 2)) { return 0.0; }
-
-    const double coeff = alpha_s / (32.0 * NC * std::pow(shat - MB2, 2));
-    const double lambda_b =
-        (SQRT2 * MB * ang.cos_alpha() / VEW + hd.c33() * ang.sin_alpha_beta()) /
-        ang.cos_beta();
-
-    CM22 pmom{shat, mh, MB};
-    const double s = shat, t = pmom.t_hat(), mh2 = mh * mh;
-    const double amp2 = -t / s - s / t - 2.0 * MB2 * (1.0 / s + 1.0 / t) -
-                        MB2 * (mh2 - MB2) * (1.0 / (s * s) + 1.0 / (t * t)) +
-                        2.0 * (s - mh2 + MB2) * (mh2 - MB2 - t) / (s * t) +
-                        8.0 * MB2 * (mh2 - 2.0 * MB2) / (s * t);
-    return coeff * lambda_b * lambda_b * amp2;
+    double g = ang.sin_alpha_beta() / (2 * SQRT2 * ang.cos_beta());
+    if (type == DQuark::Down) {
+        g *= hd.c13();
+    } else if (type == DQuark::Strange) {
+        g *= hd.c23();
+    } else {
+        g *= 0;
+    }
+    double gtilde = g;
+    return dsigma_dcos(shat, mh, 0.0, MB, alpha_s, g, gtilde);
 }
 
 double dsigma_dcos_bg(const double shat, const double mh, const double alpha_s,
                       const Hdown &hd, const Angles &ang) {
-    const double jacobian =
-        0.5 * (1 - MB2 / shat) * lambda12(shat, mh * mh, MB2);
-    const double dsigma_dt = dsigma_dt_bg(shat, mh, alpha_s, hd, ang);
-    return dsigma_dt * jacobian;
+    double lambda_b = SQRT2 * MB * ang.cos_alpha() / (VEW * ang.cos_beta()) +
+                      hd.c33() * ang.sin_alpha_beta() / ang.cos_beta();
+    double g = lambda_b / (2 * SQRT2);
+    double gtilde = g;
+    return dsigma_dcos(shat, mh, MB, MB, alpha_s, g, gtilde);
 }
 
 double dsigma_dcos_hb(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
