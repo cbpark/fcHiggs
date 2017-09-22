@@ -203,18 +203,18 @@ void printOutput(const std::string &mode, const double br) {
 }
 
 void HiggsDecayWidth::printBR() const {
-    printOutput("bq (q = d, s)", br_bq());
-    printOutput("cc", br_cc());
-    printOutput("bb", br_bb());
-    printOutput("tt", br_tt());
-    printOutput("mu+mu-", br_mumu());
-    printOutput("tau+tau-", br_tautau());
-    printOutput("ww", br_ww());
-    printOutput("zz", br_zz());
-    printOutput("z'z'", br_zpzp());
-    printOutput("aa", br_aa());
-    printOutput("gg", br_gg());
-    printOutput("hh", br_hh());
+    printOutput("bq (q = d, s)", br_bq());  // (2)
+    printOutput("cc", br_cc());             // (3)
+    printOutput("bb", br_bb());             // (4)
+    printOutput("tt", br_tt());             // (5)
+    printOutput("mu+mu-", br_mumu());       // (6)
+    printOutput("tau+tau-", br_tautau());   // (7)
+    printOutput("ww", br_ww());             // (8)
+    printOutput("zz", br_zz());             // (9)
+    printOutput("z'z'", br_zpzp());         // (10)
+    printOutput("aa", br_aa());             // (11)
+    printOutput("gg", br_gg());             // (12)
+    printOutput("hh", br_hh());             // (13)
 }
 
 std::ostream &operator<<(std::ostream &os, const HiggsDecayWidth &hdec) {
