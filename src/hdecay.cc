@@ -26,7 +26,7 @@ constexpr double MHSM = 125.0;
 constexpr double MZP = 400.0;
 constexpr double GZPX = 0.01;
 constexpr double MU = 200.0;
-constexpr double VS = 500.0;
+constexpr double VS = 1000.0;
 const double Y33U = SQRT2 * MT / VEW;
 
 int main(int argc, char *argv[]) {
