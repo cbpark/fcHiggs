@@ -37,15 +37,15 @@ void HQuartic::init_lambda(const double mh1, const double mh2, const double mu,
     double mh1_sq = mh1 * mh1, mh2_sq = mh2 * mh2;
     double mu_vs = SQRT2 * mu * vs;
 
-    lambda1_ = (2 * mh1_sq * sin_alpha_sq + 2 * mh2_sq * cos_alpha_sq -
+    lambda1_ = (2 * mh1_sq * cos_alpha_sq + 2 * mh2_sq * sin_alpha_sq -
                 mu_vs * ang_.tan_beta()) /
                (4 * VEW2 * cos_beta_sq);
-    lambda2_ = (2 * mh1_sq * cos_alpha_sq + 2 * mh2_sq * sin_alpha_sq -
+    lambda2_ = (2 * mh1_sq * sin_alpha_sq + 2 * mh2_sq * cos_alpha_sq -
                 mu_vs / ang_.tan_beta()) /
                (4 * VEW2 * sin_beta_sq);
 
     lambda34_ =
-        (2 * (-mh1_sq + mh2_sq) * ang_.sin_alpha() * ang_.cos_alpha() + mu_vs) /
+        (2 * (mh1_sq - mh2_sq) * ang_.sin_alpha() * ang_.cos_alpha() + mu_vs) /
         (8 * VEW2 * ang_.sin_beta() * ang_.cos_beta());
 }
 
