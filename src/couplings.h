@@ -10,6 +10,7 @@
 #define FCHIGGS_SRC_COUPLINGS_H_
 
 #include "angles.h"
+#include "constants.h"
 #include "utils.h"
 
 namespace fchiggs {
@@ -73,6 +74,26 @@ public:
 private:
     void init_lambda(const double mh1, const double mh2, const double mu,
                      const double vs);
+};
+
+class VHd {
+private:
+    Hdown hd_;
+
+public:
+    VHd() = delete;
+    explicit VHd(const Hdown &hd) : hd_(hd) {}
+
+public:
+    double VHd13() const {
+        return VUD * hd_.c13() + VUS * hd_.c23() + VUB * hd_.c33();
+    }
+    double VHd23() const {
+        return VCD * hd_.c13() + VCS * hd_.c23() + VCB * hd_.c33();
+    }
+    double VHd33() const {
+        return VTD * hd_.c13() + VTS * hd_.c23() + VTB * hd_.c33();
+    }
 };
 }  // namespace fchiggs
 

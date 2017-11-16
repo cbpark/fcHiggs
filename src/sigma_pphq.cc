@@ -18,13 +18,13 @@ double dsigma_dt(const double shat, const double mh, const double mqin,
     if (shat < std::pow(mh + mqout, 2)) { return 0.0; }
 
     CM22 pmom{shat, mh, mqin, mqout};
-    const double s = shat, t = pmom.t_hat();
-    const double mh2 = mh * mh, mqin2 = mqin * mqin, mqout2 = mqout * mqout;
+    double s = shat, t = pmom.t_hat();
+    double mh2 = mh * mh, mqin2 = mqin * mqin, mqout2 = mqout * mqout;
 
-    const double F1 = s * t - mqin2 * mqout2, F2 = s + t - mqin2 - mqout2;
-    const double G1 = mh2 - mqout2 - s, G2 = mh2 - mqin2 - t;
-    const double SS = s - mqin2, TT = t - mqout2;
-    const double g2 = g * g, gt2 = gtilde * gtilde;
+    double F1 = s * t - mqin2 * mqout2, F2 = s + t - mqin2 - mqout2;
+    double G1 = mh2 - mqout2 - s, G2 = mh2 - mqin2 - t;
+    double SS = s - mqin2, TT = t - mqout2;
+    double g2 = g * g, gt2 = gtilde * gtilde;
 
     double sigma =
         (g2 + gt2) * ((2 * F1 - F2 * F2 - 2 * G1 * G2) / (SS * TT) +
@@ -39,9 +39,9 @@ double dsigma_dt(const double shat, const double mh, const double mqin,
 double dsigma_dcos(const double shat, const double mh, const double mqin,
                    const double mqout, const double alpha_s, const double g,
                    const double gtilde) {
-    const double dsigma = dsigma_dt(shat, mh, mqin, mqout, alpha_s, g, gtilde);
-    const double jacobian = 0.5 * (shat - mqin * mqin) *
-                            lambda12(shat, mh * mh, mqout * mqout) / shat;
+    double dsigma = dsigma_dt(shat, mh, mqin, mqout, alpha_s, g, gtilde);
+    double jacobian = 0.5 * (shat - mqin * mqin) *
+                      lambda12(shat, mh * mh, mqout * mqout) / shat;
     return dsigma * jacobian;
 }
 }  // namespace fchiggs

@@ -69,5 +69,8 @@ constexpr double VUB = 0.00357;
 constexpr double VCD = 0.22492;
 constexpr double VCS = 0.97351;
 constexpr double VCB = 0.0411;
+constexpr double VTD = 0.00875;
+constexpr double VTS = 0.0403;
+constexpr double VTB = 0.99915;
 
 #endif  // FCHIGGS_SRC_CONSTANTS_H_
