@@ -6,8 +6,8 @@
  *  or go to <http://www.gnu.org/licenses/> for full license details.
  */
 
-#ifndef FCHIGGS_SRC_SIGMA_PPHB_H_
-#define FCHIGGS_SRC_SIGMA_PPHB_H_
+#ifndef FCHIGGS_SRC_SIGMA_PPHB_NEUTRAL_H_
+#define FCHIGGS_SRC_SIGMA_PPHB_NEUTRAL_H_
 
 #include <memory>
 #include "LHAPDF/LHAPDF.h"
@@ -21,4 +21,4 @@ double dsigma_dcos_hb(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
                       const Hdown &hd, const Angles &ang);
 }  // namespace fchiggs
 
-#endif  // FCHIGGS_SRC_SIGMA_PPHB_H_
+#endif  // FCHIGGS_SRC_SIGMA_PPHB_NEUTRAL_H_
