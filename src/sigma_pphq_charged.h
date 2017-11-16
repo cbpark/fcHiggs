@@ -6,8 +6,8 @@
  *  or go to <http://www.gnu.org/licenses/> for full license details.
  */
 
-#ifndef FCHIGGS_SRC_SIGMA_PPHT_CHARGED_H_
-#define FCHIGGS_SRC_SIGMA_PPHT_CHARGED_H_
+#ifndef FCHIGGS_SRC_SIGMA_PPHQ_CHARGED_H_
+#define FCHIGGS_SRC_SIGMA_PPHQ_CHARGED_H_
 
 #include <memory>
 #include "LHAPDF/LHAPDF.h"
@@ -19,6 +19,10 @@ namespace fchiggs {
 double dsigma_dcos_ht(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
                       const double mu, const double mh, const double alpha_s,
                       const Hup &hu, const Hdown &hd, const Angles &ang);
+
+double dsigma_dcos_hb(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
+                      const double mu, const double mh, const double alpha_s,
+                      const Hdown &hd, const Angles &ang);
 }  // namespace fchiggs
 
-#endif  // FCHIGGS_SRC_SIGMA_PPHT_CHARGED_H_
+#endif  // FCHIGGS_SRC_SIGMA_PPHQ_CHARGED_H_

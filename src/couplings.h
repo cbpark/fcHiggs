@@ -15,6 +15,7 @@
 
 namespace fchiggs {
 enum class DQuark { Down, Strange, Bottom };
+enum class UQuark { Up, Charm, Top };
 
 class Hup {
 private:

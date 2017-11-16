@@ -12,7 +12,7 @@ RM       := rm -f
 
 # Targets
 EXE    := $(BINDIR)/pph $(BINDIR)/pphb_neutral \
-	$(BINDIR)/ppht_charged \
+	$(BINDIR)/ppht_charged $(BINDIR)/pphb_charged \
 	$(BINDIR)/hdecay
 EXESRC := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ := $(EXESRC:.cc=.o)

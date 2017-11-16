@@ -22,16 +22,15 @@
 
 using std::to_string;
 
-constexpr char appname[] = "ppht_charged";
+constexpr char appname[] = "pphb_charged";
 
 constexpr double ECM = 14000.0;
 constexpr double SBEAM = ECM * ECM;
 constexpr char PDFNAME[] = "NNPDF23_lo_as_0130_qed";
 constexpr unsigned int N = 800000;
-const double Y33U = SQRT2 * MT / VEW;
 
 double weight(const fchiggs::Rho &rho, const std::shared_ptr<LHAPDF::PDF> &pdf,
-              const double mh, const fchiggs::Hup &hu, const fchiggs::Hdown &hd,
+              const double mh, const fchiggs::Hdown &hd,
               const fchiggs::Angles &ang);
 
 int main(int argc, char *argv[]) {
@@ -45,7 +44,7 @@ int main(int argc, char *argv[]) {
     message(appname, "E_{CM} = " + to_string(ECM / 1000.0) + " TeV");
     const double mh = std::atof(argv[1]);
     message(appname, "m_H = " + to_string(mh) + " GeV");
-    const double thres = mh + MT;  // it's important to set the threshold!!!
+    const double thres = mh + MB;  // it's important to set the threshold!!!
     const double qmin = thres, qmax = std::sqrt(SBEAM), mtr = thres,
                  gtr = thres;
     const fchiggs::Rho rho{qmin, qmax, mtr, gtr, SBEAM};
@@ -57,13 +56,12 @@ int main(int argc, char *argv[]) {
     message(appname, "tan(beta) = " + to_string(tan_beta) +
                          ", cos(alpha-beta) = " + to_string(cos_alpha_beta));
     const fchiggs::Angles ang{tan_beta, cos_alpha_beta};
-    const fchiggs::Hup hu{ang, Y33U};
     const fchiggs::Hdown hd{ang};
 
     message(appname, "integrating for cross section ...");
     double sum_w = 0, sum_w_sq = 0;
     for (auto itry = 0; itry != N; ++itry) {
-        const double w = weight(rho, pdf, mh, hu, hd, ang);
+        const double w = weight(rho, pdf, mh, hd, ang);
         sum_w += w;
         sum_w_sq += w * w;
     }
@@ -86,7 +84,7 @@ int main(int argc, char *argv[]) {
 }
 
 double weight(const fchiggs::Rho &rho, const std::shared_ptr<LHAPDF::PDF> &pdf,
-              const double mh, const fchiggs::Hup &hu, const fchiggs::Hdown &hd,
+              const double mh, const fchiggs::Hdown &hd,
               const fchiggs::Angles &ang) {
     const double val = fchiggs::rhoValue(rho);
     const double shat = rho.shat(val);
@@ -95,6 +93,6 @@ double weight(const fchiggs::Rho &rho, const std::shared_ptr<LHAPDF::PDF> &pdf,
     const double alpha_s = pdf->alphasQ(mu);
     const fchiggs::InitPartons p{SBEAM, shat};
 
-    return fchiggs::dsigma_dcos_ht(pdf, p, mu, mh, alpha_s, hu, hd, ang) *
-           DELTA * rho.delta() * p.delta_y() * rho.jacobian(val);
+    return fchiggs::dsigma_dcos_hb(pdf, p, mu, mh, alpha_s, hd, ang) * DELTA *
+           rho.delta() * p.delta_y() * rho.jacobian(val);
 }
