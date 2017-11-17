@@ -53,10 +53,11 @@ double dsigma_dcos_ug_hb(const double shat, const double mh,
     } else if (type == UQuark::Charm) {
         lamL = SQRT2 * MB * ang.tan_beta() * VCB / VEW -
                v.VHd23() / ang.cos_beta();
-        lamR = - SQRT2 * MC * ang.tan_beta() * VCB / VEW;
+        lamR = -SQRT2 * MC * ang.tan_beta() * VCB / VEW;
         double g = (lamL + lamR) / 2.0, gtilde = (lamL - lamR) / 2.0;
         return dsigma_dcos(shat, mh, MC, MB, alpha_s, g, gtilde);
     }
+    return 0;  // to avoid void return
 }
 
 double dsigma_dcos_hb(std::shared_ptr<LHAPDF::PDF> pdf, const InitPartons &p,
