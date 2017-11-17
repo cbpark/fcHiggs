@@ -14,6 +14,7 @@
 constexpr double PI = 3.141592653589793;
 constexpr double PI3 = 31.006276680299816;
 constexpr double TWOPI = 2.0 * PI;
+constexpr double PIHALF = PI / 2.0;
 constexpr double DELTA = 2;
 
 /** top quark mass */

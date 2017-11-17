@@ -34,16 +34,7 @@ public:
     double cos_alpha_beta() const { return cos_alpha_beta_; }
 
 private:
-    void initBetas() {
-        const double beta = std::atan(tan_beta_);
-        cos_beta_ = std::cos(beta);
-        sin_beta_ = cos_beta_ * tan_beta_;
-
-        const double alpha = beta + acos(cos_alpha_beta_);
-        sin_alpha_ = std::sin(alpha);
-        cos_alpha_ = std::cos(alpha);
-        sin_alpha_beta_ = std::sqrt(1.0 - cos_alpha_beta_ * cos_alpha_beta_);
-    }
+    void initBetas();
 };
 
 class HiggsMixing {

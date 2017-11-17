@@ -54,9 +54,8 @@ int main(int argc, char *argv[]) {
 
     const double tan_beta = std::atof(argv[2]);
     const double cos_alpha_beta = std::atof(argv[3]);
-    message(appname,
-            "tan(beta) = " + to_string(tan_beta) +
-                ", cos(alpha-beta) = " + to_string(cos_alpha_beta));
+    message(appname, "tan(beta) = " + to_string(tan_beta) +
+                         ", cos(alpha-beta) = " + to_string(cos_alpha_beta));
     const fchiggs::Angles ang{tan_beta, cos_alpha_beta};
     const fchiggs::Hup hu{ang, Y33U};
     const fchiggs::Hdown hd{ang};
@@ -72,9 +71,8 @@ int main(int argc, char *argv[]) {
     auto result = fchiggs::sigma(sum_w, sum_w_sq, N);
     const double sigma = result.first, err = result.second;
     message(appname, "... done.");
-    message(appname,
-            "total cross section = " + to_string(sigma) + " +- " +
-                to_string(err) + " pb");
+    message(appname, "total cross section = " + to_string(sigma) + " +- " +
+                         to_string(err) + " pb");
 
     if (argc == 5) {
         std::ofstream fout;
