@@ -6,8 +6,8 @@
  *  or go to <http://www.gnu.org/licenses/> for full license details.
  */
 
-#ifndef FCHIGGS_SRC_GAMMA_H_H_
-#define FCHIGGS_SRC_GAMMA_H_H_
+#ifndef FCHIGGS_SRC_GAMMA_H_NEUTRAL_H_
+#define FCHIGGS_SRC_GAMMA_H_NEUTRAL_H_
 
 #include <ostream>
 #include "angles.h"
@@ -67,4 +67,4 @@ private:
 };
 }  // namespace fchiggs
 
-#endif  // FCHIGGS_SRC_GAMMA_H_H_
+#endif  // FCHIGGS_SRC_GAMMA_H_NEUTRAL_H_

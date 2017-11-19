@@ -13,7 +13,7 @@
 #include "angles.h"
 #include "constants.h"
 #include "couplings.h"
-#include "gamma_h.h"
+#include "gamma_h_neutral.h"
 #include "pdf.h"
 #include "user_interface.h"
 
@@ -37,16 +37,14 @@ int main(int argc, char *argv[]) {
     }
 
     const double mh = std::atof(argv[1]);
-    message(appname,
-            "m_H = " + to_string(mh) + " GeV, m_H(SM) = " + to_string(MHSM) +
-                " GeV");
+    message(appname, "m_H = " + to_string(mh) +
+                         " GeV, m_H(SM) = " + to_string(MHSM) + " GeV");
     message(appname,
             "mu = " + to_string(MU) + " GeV, v_s = " + to_string(VS) + "GeV");
     const double tan_beta = std::atof(argv[2]);
     const double cos_alpha_beta = std::atof(argv[3]);
-    message(appname,
-            "tan(beta) = " + to_string(tan_beta) +
-                ", cos(alpha-beta) = " + to_string(cos_alpha_beta));
+    message(appname, "tan(beta) = " + to_string(tan_beta) +
+                         ", cos(alpha-beta) = " + to_string(cos_alpha_beta));
     fchiggs::Angles ang{tan_beta, cos_alpha_beta};
     const fchiggs::Hup cup{ang, Y33U};
     const fchiggs::Hdown cdown{ang};

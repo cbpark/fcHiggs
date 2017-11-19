@@ -6,7 +6,7 @@
  *  or go to <http://www.gnu.org/licenses/> for full license details.
  */
 
-#include "gamma_h.h"
+#include "gamma_h_neutral.h"
 #include <cmath>
 #include <complex>
 #include <iomanip>
