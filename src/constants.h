@@ -49,6 +49,7 @@ constexpr double GF = 1.1663787e-5;
 
 constexpr double SQRT2 = 1.4142135623730951;
 
+constexpr double G2 = 8 * MW2 * GF / SQRT2;
 constexpr double VEW2 = 1.0 / (SQRT2 * GF);
 
 const double VEW = std::sqrt(VEW2);

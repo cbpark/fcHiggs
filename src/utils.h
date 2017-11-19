@@ -25,6 +25,7 @@ double getRandom();
 
 inline double lambda12(const double x, const double y, const double z) {
     double lambda = x * x + y * y + z * z - 2 * x * y - 2 * y * z - 2 * z * x;
+    if (lambda < 0) { return std::sqrt(-lambda); }
     return std::sqrt(lambda);
 }
 

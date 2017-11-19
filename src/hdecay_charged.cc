@@ -13,20 +13,13 @@
 #include "angles.h"
 #include "constants.h"
 #include "couplings.h"
-#include "gamma_h_neutral.h"
-#include "pdf.h"
+#include "gamma_h_charged.h"
 #include "user_interface.h"
 
 using std::to_string;
 
-constexpr char appname[] = "hdecay_neutral";
-
-constexpr char PDFNAME[] = "NNPDF23_lo_as_0130_qed";
+constexpr char appname[] = "hdecay_charged";
 constexpr double MHSM = 125.0;
-constexpr double MZP = 400.0;
-constexpr double GZPX = 0.01;
-constexpr double MU = 200.0;
-constexpr double VS = 1000.0;
 const double Y33U = SQRT2 * MT / VEW;
 
 int main(int argc, char *argv[]) {
@@ -37,10 +30,8 @@ int main(int argc, char *argv[]) {
     }
 
     const double mh = std::atof(argv[1]);
-    message(appname, "m_H = " + to_string(mh) +
+    message(appname, "m_{H^\\pm} = " + to_string(mh) +
                          " GeV, m_H(SM) = " + to_string(MHSM) + " GeV");
-    message(appname,
-            "mu = " + to_string(MU) + " GeV, v_s = " + to_string(VS) + "GeV");
     const double tan_beta = std::atof(argv[2]);
     const double cos_alpha_beta = std::atof(argv[3]);
     message(appname, "tan(beta) = " + to_string(tan_beta) +
@@ -48,17 +39,9 @@ int main(int argc, char *argv[]) {
     fchiggs::Angles ang{tan_beta, cos_alpha_beta};
     const fchiggs::Hup cup{ang, Y33U};
     const fchiggs::Hdown cdown{ang};
+    const fchiggs::VHd vhd{cdown};
 
-    auto pdf = fchiggs::mkPdf(PDFNAME);
-    const double alpha_s = pdf->alphasQ(mh);
-    message(appname, "alpha_s(m_H) = " + to_string(alpha_s));
-
-    fchiggs::HQuartic lambda_h{MHSM, mh, fchiggs::Mu(MU), fchiggs::Vs(VS), ang};
-    const double ghhh = lambda_h.trilinear();
-
-    fchiggs::HiggsDecayWidth hdecay{
-        mh,  MHSM,  MZP, alpha_s, fchiggs::GZPX(GZPX), fchiggs::GH3(ghhh),
-        cup, cdown, ang};
+    fchiggs::ChargedHiggsDecayWidth hdecay{mh, MHSM, cup, vhd, ang};
 
     if (argc == 4) { hdecay.printBR(); }
 

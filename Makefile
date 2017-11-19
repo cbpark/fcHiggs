@@ -13,7 +13,7 @@ RM       := rm -f
 # Targets
 EXE    := $(BINDIR)/pph_neutral $(BINDIR)/pphb_neutral \
 	$(BINDIR)/ppht_charged $(BINDIR)/pphb_charged \
-	$(BINDIR)/hdecay_neutral
+	$(BINDIR)/hdecay_neutral $(BINDIR)/hdecay_charged
 EXESRC := $(patsubst $(BINDIR)/%,$(SRCDIR)/%.cc,$(EXE))
 EXEOBJ := $(EXESRC:.cc=.o)
 LIB    := $(LIBDIR)/lib$(PKGNAME).a
