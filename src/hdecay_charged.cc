@@ -37,7 +37,8 @@ int main(int argc, char *argv[]) {
     message(appname, "tan(beta) = " + to_string(tan_beta) +
                          ", cos(alpha-beta) = " + to_string(cos_alpha_beta));
     fchiggs::Angles ang{tan_beta, cos_alpha_beta};
-    const fchiggs::Hup cup{ang, Y33U};
+    const double y33u_value = Y33U / ang.cos_beta();
+    const fchiggs::Hup cup{ang, y33u_value};
     const fchiggs::Hdown cdown{ang};
     const fchiggs::VHd vhd{cdown};
 
