@@ -21,6 +21,8 @@ using std::setw;
 namespace fchiggs {
 double gamma_qq(const double mh, const double mq1, const double mq2,
                 const double g, const double gtilde) {
+    if (mh < mq1 + mq2) { return 0; }
+
     double coeff = NC * mh / (8 * PI);
 
     double g2 = g * g, gtilde2 = gtilde * gtilde;
@@ -62,6 +64,8 @@ double gamma_ub(const double mh, const VHd &v, const Angles &ang) {
 }
 
 double gamma_lnu(const double mh, const double ml, const Angles &ang) {
+    if (mh < ml) { return 0; }
+
     double ml2 = ml * ml;
     double coeff = ml2 * std::pow(ang.tan_beta(), 2) * mh / (8 * PI * VEW2);
     double beta = std::pow(1.0 - ml2 / (mh * mh), 2);
@@ -78,6 +82,8 @@ double gamma_munu(const double mh, const Angles &ang) {
 }
 
 double gamma_wh(const double mh, const double mh_sm, const Angles &ang) {
+    if (mh < mh_sm + MW) { return 0; }
+
     double coeff =
         G2 * std::pow(ang.cos_alpha_beta(), 2) * mh * mh * mh / (64 * PI * MW2);
 
