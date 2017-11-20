@@ -63,6 +63,22 @@ double gamma_ub(const double mh, const VHd &v, const Angles &ang) {
     return gamma;
 }
 
+double gamma_cs(const double mh, const Angles &ang) {
+    double lamL = 0;
+    double lamR = -SQRT2 * MC * ang.tan_beta() * VCS / VEW;
+    double g = (lamL + lamR) / 2.0, gtilde = (lamL - lamR) / 2.0;
+    double gamma = gamma_qq(mh, 0.0, MC, g, gtilde);
+    return gamma;
+}
+
+double gamma_cd(const double mh, const Angles &ang) {
+    double lamL = 0;
+    double lamR = -SQRT2 * MC * ang.tan_beta() * VCD / VEW;
+    double g = (lamL + lamR) / 2.0, gtilde = (lamL - lamR) / 2.0;
+    double gamma = gamma_qq(mh, 0.0, MC, g, gtilde);
+    return gamma;
+}
+
 double gamma_lnu(const double mh, const double ml, const Angles &ang) {
     if (mh < ml) { return 0; }
 
@@ -99,13 +115,15 @@ void ChargedHiggsDecayWidth::init_gamma(const double mh_sm, const Hup &hu,
     gamma_tb_ = gamma_tb(mh_, hu, v, ang);
     gamma_cb_ = gamma_cb(mh_, v, ang);
     gamma_ub_ = gamma_ub(mh_, v, ang);
+    gamma_cs_ = gamma_cs(mh_, ang);
+    gamma_cd_ = gamma_cd(mh_, ang);
 
     gamma_taunu_ = gamma_taunu(mh_, ang);
     gamma_munu_ = gamma_munu(mh_, ang);
 
     gamma_wh_ = gamma_wh(mh_, mh_sm, ang);
 
-    gamma_total_ = gamma_tb_ + gamma_cb_ + gamma_ub_;
+    gamma_total_ = gamma_tb_ + gamma_cb_ + gamma_ub_ + gamma_cs_ + gamma_cd_;
     gamma_total_ += gamma_taunu_ + gamma_munu_;
     gamma_total_ += gamma_wh_;
 }
@@ -118,9 +136,11 @@ void ChargedHiggsDecayWidth::printBR() const {
     printOutput("t b", br_tb());        // (2)
     printOutput("c b", br_cb());        // (3)
     printOutput("u b", br_ub());        // (4)
-    printOutput("tau nu", br_taunu());  // (5)
-    printOutput("mu nu", br_munu());    // (6)
-    printOutput("W h", br_wh());        // (7)
+    printOutput("c s", br_cs());        // (5)
+    printOutput("c d", br_cd());        // (6)
+    printOutput("tau nu", br_taunu());  // (7)
+    printOutput("mu nu", br_munu());    // (8)
+    printOutput("W h", br_wh());        // (9)
 }
 
 std::ostream &operator<<(std::ostream &os, const ChargedHiggsDecayWidth &hdec) {
@@ -130,7 +150,8 @@ std::ostream &operator<<(std::ostream &os, const ChargedHiggsDecayWidth &hdec) {
     os << std::right << std::fixed << std::setprecision(2) << setw(7)
        << hdec.mh_;
     os << std::setprecision(pre) << setw(width) << hdec.br_tb() << setw(width)
-       << hdec.br_cb() << setw(width) << hdec.br_ub();
+       << hdec.br_cb() << setw(width) << hdec.br_ub() << setw(width)
+       << hdec.br_cs() << setw(width) << hdec.br_cd();
     os << setw(width) << hdec.br_taunu() << setw(width) << hdec.br_munu();
     os << setw(width) << hdec.br_wh();
 

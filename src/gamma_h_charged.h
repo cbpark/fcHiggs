@@ -16,7 +16,7 @@ namespace fchiggs {
 class ChargedHiggsDecayWidth {
 private:
     double mh_;
-    double gamma_tb_, gamma_cb_, gamma_ub_;
+    double gamma_tb_, gamma_cb_, gamma_ub_, gamma_cs_, gamma_cd_;
     double gamma_taunu_, gamma_munu_;
     double gamma_wh_;
 
@@ -33,6 +33,8 @@ public:
     double br_tb() const { return gamma_tb_ / gamma_total_; }
     double br_cb() const { return gamma_cb_ / gamma_total_; }
     double br_ub() const { return gamma_ub_ / gamma_total_; }
+    double br_cs() const { return gamma_cs_ / gamma_total_; }
+    double br_cd() const { return gamma_cd_ / gamma_total_; }
     double br_taunu() const { return gamma_taunu_ / gamma_total_; }
     double br_munu() const { return gamma_munu_ / gamma_total_; }
     double br_wh() const { return gamma_wh_ / gamma_total_; }
