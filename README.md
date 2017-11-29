@@ -1,6 +1,6 @@
 # fcHiggs
 
-Codes to calculate the cross sections and branching ratios of Higgs bosons studied in [arxiv.org/abs/arXiv:1711.08930](arXiv:1711.08930).
+Codes to calculate the cross sections and branching ratios of Higgs bosons studied in [arXiv:1711.08930](https://arxiv.org/abs/1711.08930).
 
 ## Requirements
 
