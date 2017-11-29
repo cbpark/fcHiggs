@@ -22,7 +22,7 @@
 
 using std::to_string;
 
-constexpr char appname[] = "pph";
+constexpr char appname[] = "pph_neutral";
 
 constexpr double ECM = 14000.0;
 constexpr double SBEAM = ECM * ECM;
