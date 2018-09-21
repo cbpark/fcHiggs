@@ -15,8 +15,10 @@ lhapdf install NNPDF23_lo_as_0130_qed
 * The [Nix](https://nixos.org/nix/) users can build this package by running
 
 ```
-nix-build build.nix
+nix-build
 ```
+
+See [default.nix](./default.nix).
 
 ## Usage
 
